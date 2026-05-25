@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Booking Cancellation Predictor</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">HB</span>
+      <div>
+        <h1>Hotel Booking Cancel Predictor</h1>
+        <p>Dự đoán rủi ro huỷ đặt phòng</p>
+      </div>
+    </div>
+    <div id="apiStatus" class="status-pill pending">
+      <span class="dot"></span>
+      Đang kết nối mô hình
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="model-panel">
+      <p class="section-label">Mô hình</p>
+      <h2>Chọn thuật toán</h2>
+      <div id="modelList" class="model-list" aria-label="Danh sách mô hình"></div>
+      <section id="modelMetrics" class="metrics-panel" aria-live="polite"></section>
+    </aside>
+
+    <section class="prediction-panel">
+      <div class="panel-head">
+        <div>
+          <p class="section-label">Dữ liệu đầu vào</p>
+          <h2>Thực hiện dự đoán</h2>
+        </div>
+        <nav class="mode-switch" aria-label="Chế độ nhập dữ liệu">
+          <button class="mode-button active" data-mode="csv">Tệp CSV</button>
+          <button class="mode-button" data-mode="manual">Nhập tay</button>
+        </nav>
+      </div>
+
+      <section id="csvMode" class="input-mode active">
+        <label id="dropzone" class="dropzone" for="csvFile">
+          <input id="csvFile" type="file" accept=".csv,text/csv">
+          <span class="file-icon" aria-hidden="true">&#8682;</span>
+          <strong id="dropzoneTitle">Tải tệp CSV</strong>
+          <span id="dropzoneText">Kéo thả hoặc chọn tệp dữ liệu đầu vào</span>
+        </label>
+        <div class="inline-actions">
+          <button id="downloadTemplate" class="button secondary">Tải CSV mẫu</button>
+          <span id="csvInfo" class="muted"></span>
+        </div>
+      </section>
+
+      <section id="manualMode" class="input-mode">
+        <div class="manual-toolbar">
+          <span id="rowCount" class="muted">1 / 10 dòng</span>
+          <button id="addRow" class="button secondary">Thêm dòng</button>
+        </div>
+        <div id="manualRows" class="manual-rows"></div>
+      </section>
+
+      <div class="submit-bar">
+        <span id="validationMessage" class="message" aria-live="polite"></span>
+        <button id="predictButton" class="button primary" disabled>Dự đoán</button>
+      </div>
+
+      <section id="results" class="results hidden" aria-live="polite">
+        <div class="result-head">
+          <div>
+            <p class="section-label">Kết quả</p>
+            <h2 id="resultTitle">Kết quả dự đoán</h2>
+          </div>
+          <button id="downloadResults" class="button secondary">Tải kết quả CSV</button>
+        </div>
+        <div id="summaryCards" class="summary-cards"></div>
+        <div class="table-wrap">
+          <table>
+            <thead id="resultTableHead"></thead>
+            <tbody id="resultTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <template id="modelTemplate">
+    <button class="model-option">
+      <span class="model-name"></span>
+      <span class="model-score"></span>
+    </button>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
