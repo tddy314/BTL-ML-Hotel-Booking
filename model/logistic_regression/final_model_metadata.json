@@ -1,0 +1,18 @@
+{
+  "final_model_name": "logistic_fe_outlier_class_weight_balanced",
+  "algorithm": "LogisticRegression",
+  "reason_selected": "Highest F1, recall, and ROC-AUC among Logistic Regression experiments",
+  "improvements": [
+    "class_weight balanced",
+    "feature engineering",
+    "outlier clipping 1%-99% for adr, adults, lead_time, days_in_waiting_list"
+  ],
+  "test_metrics": {
+    "model": "logistic_fe_outlier_class_weight_balanced",
+    "accuracy": 0.7783752860411899,
+    "precision": 0.5655356891454315,
+    "recall": 0.8360041623309054,
+    "f1": 0.6746724890829694,
+    "roc_auc": 0.8717295634273142
+  }
+}

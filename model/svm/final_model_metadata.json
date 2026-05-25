@@ -1,0 +1,17 @@
+{
+  "final_model_name": "svm_fe_outlier_tuned",
+  "algorithm": "LinearSVC",
+  "selection_metric": "f1_then_roc_auc",
+  "best_params": {
+    "model__C": 0.1
+  },
+  "test_metrics": {
+    "model": "svm_fe_outlier_tuned",
+    "accuracy": 0.7736270022883295,
+    "precision": 0.5585797181541863,
+    "recall": 0.8414151925078044,
+    "f1": 0.6714273852030225,
+    "roc_auc": 0.8712992260281143
+  },
+  "note": "LinearSVC is used instead of kernel SVC because the dataset is large after one-hot encoding."
+}

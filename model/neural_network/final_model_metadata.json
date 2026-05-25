@@ -1,0 +1,27 @@
+{
+  "final_model_name": "neural_network_fe_outlier_tuned",
+  "algorithm": "MLPClassifier",
+  "selection_metric": "f1_then_roc_auc",
+  "best_params": {
+    "alpha": 0.001,
+    "hidden_layer_sizes": [
+      128,
+      64
+    ],
+    "learning_rate_init": 0.001
+  },
+  "test_metrics": {
+    "model": "neural_network_fe_outlier_tuned",
+    "accuracy": 0.8233409610983982,
+    "precision": 0.6342875019552636,
+    "recall": 0.8439125910509886,
+    "f1": 0.7242364707983568,
+    "roc_auc": 0.9141820055128309
+  },
+  "missing_handling": {
+    "company": "drop column",
+    "agent": "fill Unknown",
+    "country": "fill Unknown",
+    "children": "fill median"
+  }
+}
