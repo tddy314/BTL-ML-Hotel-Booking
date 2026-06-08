@@ -49,3 +49,7 @@ model/**/*metadata.json
 model/**/*.csv
 model/all_algorithms_summary.csv
 model/all_algorithms_comparison.csv
+build_presentation.py
+hotel_booking_presentation.pdf
+hotel_booking_presentation.pptx
+bao_cao_hotel_booking.tex

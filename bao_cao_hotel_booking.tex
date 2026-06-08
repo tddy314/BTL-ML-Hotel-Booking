@@ -28,7 +28,8 @@
 \usepackage{multirow}
 \usepackage{caption}
 \usepackage{subcaption}
-
+\usepackage{float}
+\usepackage{tabularx}
 % ---------- Code listings ----------
 \usepackage{xcolor}
 \usepackage{listings}
@@ -85,7 +86,9 @@
 \vspace{2.5cm}
 
 % Logo placeholder
-\fbox{\begin{minipage}{0.3\textwidth}\centering\vspace{2em} \textit{[LOGO ĐHBK HN]} \vspace{2em}\end{minipage}}
+\begin{center}
+\includegraphics[scale=0.1]{logoBK.png}
+\end{center}
 \vspace{2cm}
 
 {\large\bfseries NHẬP MÔN HỌC MÁY VÀ KHAI PHÁ DỮ LIỆU --- IT3190\par}
@@ -100,17 +103,17 @@
 
 \vspace{3cm}
 \begin{tabular}{ll}
-\textbf{GVHD:}      & [Tên giảng viên hướng dẫn] \\[0.4em]
-\textbf{Mã lớp học:}& [Mã lớp] \\[0.4em]
-\textbf{Sinh viên:} & [Tên thành viên 1] --- [MSSV] \\
-                    & [Tên thành viên 2] --- [MSSV] \\
-                    & [Tên thành viên 3] --- [MSSV] \\
-                    & [Tên thành viên 4] --- [MSSV] \\
-                    & [Tên thành viên 5] --- [MSSV] \\
+\textbf{GVHD:}      & PGS.TS Nguyễn Thị Kim Anh \\[0.4em]
+\textbf{Mã lớp học:}& 168488 - IT3190 \\[0.4em]
+\textbf{Sinh viên:} & Nguyễn Tùng Dương --- 20230023 \\
+                    & Đoàn Xuân Công Đạt --- 20235030 \\
+                    & Trần Minh Quân --- 20235201 \\
+                    & Dương Tuấn Minh --- 202400060 \\
+                 
 \end{tabular}
 
 \vfill
-{\large Hà Nội, ngày \today\par}
+{\large Hà Nội, ngày 30 tháng 5 năm 2026}
 \end{titlepage}
 
 % =========================================================================
@@ -126,7 +129,7 @@
 
 \subsection{Tổng quan bài toán}
 
-Trong ngành kinh doanh khách sạn, \textbf{hủy đặt phòng (booking cancellation)} là một trong những vấn đề nghiêm trọng ảnh hưởng trực tiếp đến doanh thu và hiệu quả vận hành. Theo nghiên cứu của Antonio và cộng sự (2019), trung bình từ 25\% đến hơn 50\% số booking tại các khách sạn châu Âu bị hủy trước ngày check-in, gây ra:
+Trong kinh doanh khách sạn, \textbf{hủy đặt phòng (booking cancellation)} là một vấn đề quen thuộc nhưng khó xử lý, vì nó ảnh hưởng trực tiếp đến doanh thu và kế hoạch vận hành hằng ngày. Theo nghiên cứu của Antonio và cộng sự (2019), khoảng 25\% đến hơn 50\% số booking tại một số khách sạn châu Âu bị hủy trước ngày check-in. Việc này kéo theo một số hệ quả chính:
 
 \begin{itemize}
     \item \textbf{Thiệt hại doanh thu trực tiếp} do phòng trống không kịp bán lại.
@@ -134,12 +137,12 @@ Trong ngành kinh doanh khách sạn, \textbf{hủy đặt phòng (booking cance
     \item \textbf{Sai lệch trong các chiến lược định giá động} (dynamic pricing) và quản lý lợi nhuận (revenue management).
 \end{itemize}
 
-Để giảm thiểu các tác động tiêu cực trên, ngành khách sạn áp dụng nhiều giải pháp như \emph{overbooking} (nhận đặt nhiều hơn số phòng thực tế dựa trên dự đoán tỷ lệ hủy), \emph{deposit policy} (yêu cầu đặt cọc không hoàn lại), và đặc biệt là \emph{xây dựng mô hình học máy} để dự đoán trước xác suất một booking sẽ bị hủy. Khi có dự đoán chính xác, khách sạn có thể:
+Để giảm bớt các tác động này, khách sạn thường dùng các biện pháp như \emph{overbooking} (nhận đặt nhiều hơn số phòng thực tế dựa trên tỷ lệ hủy dự kiến), \emph{deposit policy} (yêu cầu đặt cọc không hoàn lại), hoặc xây dựng mô hình dự đoán rủi ro hủy phòng. Nếu ước lượng được xác suất hủy của từng booking, khách sạn có thêm cơ sở để:
 
 \begin{itemize}
     \item Chủ động liên hệ khách hàng có rủi ro hủy cao để xác nhận lại.
     \item Áp dụng chính sách overbooking an toàn dựa trên xác suất tổng hợp.
-    \item Tối ưu pricing cho các segment khách có rủi ro hủy thấp.
+    \item Điều chỉnh giá hoặc ưu đãi cho các nhóm khách có rủi ro hủy thấp.
 \end{itemize}
 
 \subsection{Đặc điểm bài toán}
@@ -160,27 +163,27 @@ Bài toán \emph{dự đoán hủy booking} có những đặc điểm sau:
 
 \subsection{Mục đích nghiên cứu}
 
-Mục tiêu nghiên cứu của nhóm trong bài tập lớn này gồm:
+Trong bài tập lớn này, nhóm tập trung vào các mục tiêu sau:
 
 \begin{enumerate}
-    \item Xây dựng và đánh giá \textbf{nhiều mô hình học máy} cho bài toán dự đoán hủy booking, bao gồm cả mô hình \emph{tuyến tính} (Logistic Regression, SVM) và mô hình \emph{phi tuyến} (Random Forest, Neural Network).
-    \item Áp dụng các kỹ thuật \textbf{tiền xử lý nâng cao}: xử lý missing values, outlier clipping, feature engineering, encoding cho biến phân loại cardinality cao.
+    \item Xây dựng và đánh giá một số mô hình học máy cho bài toán dự đoán hủy booking, gồm mô hình \emph{tuyến tính} (Logistic Regression, SVM) và mô hình \emph{phi tuyến} (Random Forest, Neural Network).
+    \item Áp dụng các bước tiền xử lý cần thiết: xử lý missing values, outlier clipping, feature engineering, encoding cho biến phân loại cardinality cao.
     \item Xử lý vấn đề \textbf{mất cân bằng lớp} bằng \texttt{class\_weight='balanced'} (hoặc \texttt{sample\_weight} với MLP), so sánh hiệu quả với baseline không xử lý.
     \item \textbf{Tinh chỉnh siêu tham số} bằng các phương pháp phù hợp với từng thuật toán: GridSearchCV, RandomizedSearchCV, ParameterGrid manual.
-    \item \textbf{So sánh hiệu năng} của 4 thuật toán trên cùng một tập kiểm thử, đánh giá theo nhiều tiêu chí: Accuracy, Precision, Recall, F1-score, ROC-AUC, đồng thời \textbf{kiểm tra overfitting} qua chênh lệch metrics train-test.
-    \item Đề xuất \textbf{mô hình tốt nhất} để triển khai trong hệ thống thực tế và hướng tối ưu trong tương lai.
+    \item So sánh hiệu năng của 4 thuật toán trên cùng một tập kiểm thử, dựa trên Accuracy, Precision, Recall, F1-score, ROC-AUC, đồng thời kiểm tra overfitting qua chênh lệch metrics train-test.
+    \item Chọn mô hình phù hợp nhất với dữ liệu hiện có và nêu hướng cải thiện nếu tiếp tục phát triển.
 \end{enumerate}
 
 \subsection{Hướng tiếp cận và kế hoạch thực hiện}
 
-Nhóm triển khai nghiên cứu theo các giai đoạn:
+Quy trình thực hiện được chia thành các bước sau:
 
 \begin{itemize}
     \item \textbf{Thu thập dữ liệu}: Sử dụng dataset \emph{Hotel Booking Demand} do Antonio, Almeida, và Nunes công bố trên ScienceDirect (2019) và Kaggle, bao gồm dữ liệu thực tế từ một khách sạn nghỉ dưỡng (Resort Hotel) và một khách sạn thành phố (City Hotel) tại Bồ Đào Nha trong giai đoạn 2015--2017.
 
-    \item \textbf{Khai phá dữ liệu (EDA)}: Phân tích phân bố target, missing values, outliers, cardinality các biến phân loại, và tỷ lệ hủy theo các nhóm thuộc tính nhằm rút ra insight cho bước preprocessing.
+    \item \textbf{Khai phá dữ liệu (EDA)}: Phân tích phân bố target, missing values, outliers, cardinality các biến phân loại, và tỷ lệ hủy theo các nhóm thuộc tính để quyết định cách tiền xử lý.
 
-    \item \textbf{Tiền xử lý}: Drop duplicates, xử lý missing, loại bỏ cột leakage, feature engineering (tạo 8 biến mới), outlier clipping 1\%--99\%, encoding (One-Hot cho cardinality thấp, target/frequency encoding cho cardinality cao --- thử nghiệm với LR).
+    \item \textbf{Tiền xử lý}: Loại bản ghi trùng, xử lý missing, bỏ cột leakage, tạo 8 biến mới, clip outlier theo ngưỡng 1\%--99\%, và encoding các biến phân loại.
 
     \item \textbf{Huấn luyện mô hình}: 4 thuật toán theo trình tự:
     \begin{enumerate}
@@ -189,16 +192,16 @@ Nhóm triển khai nghiên cứu theo các giai đoạn:
         \item Random Forest (mô hình phi tuyến với feature importance)
         \item Neural Network (MLPClassifier)
     \end{enumerate}
-    Với mỗi thuật toán, nhóm tiến hành các bước: baseline $\to$ class\_weight='balanced' $\to$ + feature engineering + outlier clipping $\to$ hyperparameter tuning $\to$ đánh giá final model.
+    Với mỗi thuật toán, nhóm đi từ baseline, sau đó thêm xử lý mất cân bằng lớp, feature engineering, outlier clipping, rồi tinh chỉnh siêu tham số nếu cần.
 
     \item \textbf{Đánh giá mô hình}: Tính các metrics Accuracy, Precision, Recall, F1, ROC-AUC trên tập test. Vẽ confusion matrix, ROC curve. Kiểm tra overfitting qua train-test gap.
 
-    \item \textbf{So sánh và lựa chọn}: Tổng hợp kết quả của 4 thuật toán trên cùng tập test, đưa ra recommendation cho mô hình triển khai.
+    \item \textbf{So sánh và lựa chọn}: Tổng hợp kết quả của 4 thuật toán trên cùng tập test, từ đó chọn mô hình phù hợp để triển khai thử nghiệm.
 \end{itemize}
 
 \subsection{Phân chia công việc}
 
-Để đảm bảo tiến độ và hiệu quả nghiên cứu, nhóm phân chia công việc cho từng thành viên như sau:
+Nhóm phân chia công việc theo từng mảng chính như sau:
 
 \begin{table}[h!]
 \centering
@@ -207,11 +210,11 @@ Nhóm triển khai nghiên cứu theo các giai đoạn:
 \begin{tabular}{|l|p{8cm}|}
 \hline
 \textbf{Họ và tên} & \textbf{Nội dung phụ trách} \\ \hline
-[Tên thành viên 1] & Khai phá dữ liệu, EDA, viết Section 1--2 báo cáo \\ \hline
-[Tên thành viên 2] & Triển khai mô hình Logistic Regression \\ \hline
-[Tên thành viên 3] & Triển khai mô hình SVM (LinearSVC) \\ \hline
-[Tên thành viên 4] & Triển khai mô hình Random Forest \\ \hline
-[Tên thành viên 5] & Triển khai mô hình Neural Network, viết Section 4--5 và so sánh \\ \hline
+Nguyễn Tùng Dương & Khai phá dữ liệu, EDA, triển khai mô hình Neural Network \\ \hline
+Đoàn Xuân Công Đạt & Triển khai mô hình Logistic Regression \\ \hline
+Trần Minh Quân & Triển khai mô hình SVM (LinearSVC) \\ \hline
+Dương Tuấn Minh & Triển khai mô hình Random Forest \\ \hline
+
 \end{tabular}
 \end{table}
 
@@ -223,7 +226,7 @@ Nhóm triển khai nghiên cứu theo các giai đoạn:
 
 \subsection{Tổng quan dữ liệu}
 
-Dataset \emph{Hotel Booking Demand} (Antonio, Almeida, Nunes 2019) chứa thông tin chi tiết về các booking tại hai khách sạn ở Bồ Đào Nha trong giai đoạn từ tháng 7/2015 đến tháng 8/2017. Đây là một trong những bộ dữ liệu chuẩn cho bài toán dự đoán hủy booking và đã được sử dụng trong nhiều nghiên cứu học thuật.
+Dataset \emph{Hotel Booking Demand} (Antonio, Almeida, Nunes 2019) ghi lại thông tin booking của hai khách sạn ở Bồ Đào Nha trong giai đoạn tháng 7/2015 đến tháng 8/2017. Bộ dữ liệu này phù hợp với bài toán dự đoán hủy phòng vì có cả thông tin đặt phòng, thông tin khách hàng và nhãn \texttt{is\_canceled}.
 
 Dataset ban đầu có:
 
@@ -284,11 +287,11 @@ Các đặc trưng được chia thành ba nhóm chính: numeric, categorical, v
 
 \subsubsection{Xử lý trùng lặp (Duplicates)}
 
-Phân tích cho thấy dataset có 31{,}994 bản ghi trùng lặp hoàn toàn, chiếm khoảng 26.8\% tổng số. Nhóm quyết định \textbf{loại bỏ toàn bộ duplicate} trước khi training. Sau xử lý, dataset còn lại 87{,}396 bản ghi --- vẫn đủ lớn cho việc training và validation đáng tin cậy.
+Dataset có 31{,}994 bản ghi trùng lặp hoàn toàn, chiếm khoảng 26.8\% tổng số dòng. Nhóm loại bỏ các dòng này trước khi huấn luyện để tránh việc mô hình học lặp lại cùng một mẫu. Sau bước này, dữ liệu còn 87{,}396 bản ghi, vẫn đủ lớn cho training và validation.
 
 \subsubsection{Thống kê giá trị thiếu (Missing Values)}
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \caption{Thống kê missing values theo từng cột}
 \renewcommand{\arraystretch}{1.2}
@@ -302,7 +305,11 @@ Phân tích cho thấy dataset có 31{,}994 bản ghi trùng lặp hoàn toàn, 
 \end{tabular}
 \end{table}
 
-\figurePlaceholder{Biểu đồ bar tỷ lệ missing values theo cột}{Xuất từ EDA notebook, cell ``Biểu đồ Tỷ lệ Giá Trị Thiếu''.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{missing_value.png}
+    \caption{Biểu đồ tỷ lệ giá trị thiếu}
+\end{figure}
 
 \subsubsection{Phân bố nhãn (Target Distribution)}
 
@@ -313,11 +320,15 @@ Phân tích cho thấy target \texttt{is\_canceled} có phân bố:
     \item Class 1 (canceled): \textbf{37\%} (32{,}401 booking)
 \end{itemize}
 
-Đây là mất cân bằng nhẹ (không nghiêm trọng như fraud detection với tỷ lệ 1:1000). Tuy nhiên vẫn cần xử lý vì nếu để mặc định, model sẽ ưu tiên dự đoán class 0 (majority) dẫn đến \textbf{recall thấp} --- điều không mong muốn trong bài toán này (việc bỏ sót booking có khả năng hủy gây thiệt hại lớn hơn dự đoán nhầm).
+Mức mất cân bằng này không quá nặng, nhưng vẫn ảnh hưởng đến mô hình. Nếu huấn luyện mặc định, mô hình dễ nghiêng về class 0 (không hủy), làm recall của class hủy giảm. Trong bài toán này, bỏ sót một booking có khả năng hủy thường gây thiệt hại nhiều hơn so với cảnh báo nhầm.
 
 \textbf{Quyết định}: sử dụng \texttt{class\_weight='balanced'} cho tất cả các thuật toán hỗ trợ (LR, SVM, RF), và \texttt{sample\_weight} tương đương cho Neural Network.
 
-\figurePlaceholder{Bar chart phân bố nhãn is\_canceled}{Xuất từ EDA notebook, cell ``Phân Bố Nhãn Is\_Canceled''.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{label_distribution.png}
+    \caption{Biểu đồ phân bổ nhãn}
+\end{figure}
 
 \subsubsection{Phân tích Outliers}
 
@@ -330,11 +341,11 @@ Boxplot của các biến số quan trọng cho thấy:
     \item \texttt{days\_in\_waiting\_list}: 99\% bản ghi có giá trị 0 (không waiting), một số ít kéo dài đến hàng tháng.
 \end{itemize}
 
-\textbf{Quyết định}: \textbf{clip 1\%--99\%} cho 4 cột \texttt{adr}, \texttt{adults}, \texttt{lead\_time}, \texttt{days\_in\_waiting\_list}. Không xóa dòng vì có thể là dữ liệu thật bất thường, chỉ cap nguỡng để model không bị kéo lệch bởi extreme values.
+\textbf{Quyết định}: clip theo ngưỡng 1\%--99\% cho 4 cột \texttt{adr}, \texttt{adults}, \texttt{lead\_time}, \texttt{days\_in\_waiting\_list}. Nhóm không xóa các dòng này vì một phần có thể là booking thật nhưng bất thường; việc clip giúp giảm ảnh hưởng của các giá trị quá cực đoan lên mô hình.
 
 Sau khi clip với percentile 1\% và 99\%, các bound thu được:
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \caption{Outlier clipping bounds (percentile 1\%--99\%)}
 \begin{tabular}{|l|r|r|}
@@ -347,42 +358,69 @@ Sau khi clip với percentile 1\% và 99\%, các bound thu được:
 \end{tabular}
 \end{table}
 
-\figurePlaceholder{Boxplot của 4 biến lead\_time, adr, adults, days\_in\_waiting\_list}{Xuất từ EDA notebook, cell ``Phát Hiện Outlier Bằng Boxplot''.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{outliner_detection.png}
+    \caption{Phát hiện outliners bằng boxplot}
+\end{figure}
 
 \subsubsection{Phân tích biến phân loại}
 
 \begin{itemize}
-    \item \texttt{country}: \textbf{177 giá trị} unique --- cardinality rất cao. Top 5: PRT (Bồ Đào Nha) 40\%, GBR 10\%, FRA 8\%, ESP 7\%, DEU 6\%. Khi One-Hot Encoding sẽ tạo ra 177 cột mới --- cần lưu ý kích thước feature space.
+    \item \texttt{country}: \textbf{177 giá trị} unique --- cardinality rất cao. Top 5: PRT (Bồ Đào Nha) 40\%, GBR 10\%, FRA 8\%, ESP 7\%, DEU 6\%. Khi One-Hot Encoding sẽ tạo ra 177 cột mới.
     \item \texttt{agent}: hàng nghìn ID khác nhau, phần lớn là số ít booking. Chuyển sang string + fill \texttt{'Unknown'} cho missing.
     \item Các biến cardinality thấp như \texttt{meal} (5 giá trị), \texttt{market\_segment} (8), \texttt{deposit\_type} (3), \texttt{customer\_type} (4) phù hợp với One-Hot Encoding chuẩn.
 \end{itemize}
 
 \subsubsection{Tỷ lệ hủy theo các nhóm thuộc tính}
 
-Phân tích cancellation rate theo các nhóm thuộc tính cho thấy nhiều tín hiệu phân biệt mạnh:
+Khi tính cancellation rate theo từng nhóm thuộc tính, một số biến cho thấy tín hiệu khá rõ:
 
 \begin{itemize}
-    \item \texttt{deposit\_type = 'Non Refund'}: cancellation rate \textbf{~99\%} --- gần như deterministic. Đây là một trong những feature có discriminative power cao nhất.
+    \item \texttt{deposit\_type = 'Non Refund'}: cancellation rate \textbf{~99\%}. Đây là một trong những biến tách biệt rõ nhất giữa hai lớp.
     \item \texttt{City Hotel} có cancellation rate ~42\%, cao hơn \texttt{Resort Hotel} ~28\%.
     \item \texttt{customer\_type = 'Transient'}: cancellation rate cao hơn nhóm \texttt{Contract} và \texttt{Group}.
     \item \texttt{market\_segment = 'Groups'}: cancellation rate cao bất thường ~60\%.
     \item Booking từ \texttt{country = 'PRT'} có cancellation rate cao hơn các country khác.
 \end{itemize}
 
-Những insight này giúp xác định các feature quan trọng mà model sẽ khai thác mạnh: \texttt{deposit\_type}, \texttt{country}, \texttt{market\_segment}, \texttt{customer\_type}, \texttt{lead\_time}.
+Các kết quả này gợi ý rằng \texttt{deposit\_type}, \texttt{country}, \texttt{market\_segment}, \texttt{customer\_type} và \texttt{lead\_time} có thể đóng vai trò quan trọng trong mô hình.
 
-\figurePlaceholder{4 bar chart cancellation rate by hotel/deposit\_type/market\_segment/customer\_type}{Xuất từ EDA notebook, cell ``Tỷ Lệ Hủy Booking Theo Nhóm Thuộc Tính''.}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{hotel_cancel_rate.png}
+    \caption{Tỷ lệ hủy phòng dựa trên loại khách sạn}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{deposit_type_cancel_rate.png}
+    \caption{Tỷ lệ hủy phòng dựa trên chính sách đặt cọc}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{market_segment_cancel_rate.png}
+    \caption{Tỷ lệ hủy phòng dựa trên phân khúc thị trường}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{customer_type_cancel_rate.png}
+    \caption{Tỷ lệ hủy phòng dựa trên tệp khách hàng}
+\end{figure}
 
 \subsubsection{Loại bỏ cột rò rỉ dữ liệu (Leakage Columns)}
 
-Hai cột sau \textbf{phải được loại bỏ trước khi training} vì chỉ có giá trị sau khi booking đã có kết quả:
+Hai cột sau được loại bỏ trước khi training vì chỉ biết được sau khi booking đã có kết quả:
 
 \begin{itemize}
     \item \texttt{reservation\_status}: nhận giá trị \texttt{Check-Out}, \texttt{Canceled}, \texttt{No-Show}. Tương đương trực tiếp với target.
     \item \texttt{reservation\_status\_date}: ngày cập nhật trạng thái cuối cùng, chỉ tồn tại sau khi booking đã hoàn thành.
 \end{itemize}
 
-Nếu để các cột này trong tập feature, model sẽ đạt 100\% accuracy nhưng \emph{vô dụng} trong production vì frontend không có thông tin này khi user vừa đặt booking.
 
 \subsubsection{Tỷ lệ phân chia tập train/test}
 
@@ -393,7 +431,7 @@ Sau khi cleaning, dataset 87{,}396 bản ghi được chia thành:
     \item \textbf{Test set}: 17{,}480 bản ghi (20\%)
 \end{itemize}
 
-Sử dụng \texttt{train\_test\_split(..., test\_size=0.2, random\_state=42, stratify=y)} để đảm bảo phân bố target trong cả 2 tập đều bằng 37\%/63\%, tránh bias do chia ngẫu nhiên.
+Nhóm dùng \texttt{train\_test\_split(..., test\_size=0.2, random\_state=42, stratify=y)} để giữ tỷ lệ target ở train và test gần giống dữ liệu gốc, tránh sai lệch do chia ngẫu nhiên.
 
 \subsubsection{Feature Engineering (FE)}
 
@@ -417,7 +455,7 @@ Dựa trên các insight từ EDA, nhóm tạo thêm \textbf{8 đặc trưng k�
 \end{tabular}
 \end{table}
 
-Các feature này giúp model phi tuyến (RF, NN) bắt được tín hiệu nhanh hơn so với việc phải tự học từ các raw feature. Cũng giúp model tuyến tính (LR, SVM) bắt được một số tương tác (e.g., \texttt{has\_children + is\_family} thay vì học từ \texttt{children} và \texttt{babies} riêng).
+Các feature này giúp mô hình có thêm tín hiệu dễ dùng hơn, thay vì phải tự suy ra toàn bộ từ các cột gốc. Với mô hình tuyến tính, một số biến nhị phân như \texttt{has\_children}, \texttt{room\_changed} cũng giúp biểu diễn các tương tác đơn giản rõ hơn.
 
 Sau khi FE, dataset có \textbf{37 cột} (= 29 cột gốc sau cleaning + 8 cột mới), trong đó 1 cột là target.
 
@@ -427,42 +465,47 @@ Sau khi FE, dataset có \textbf{37 cột} (= 29 cột gốc sau cleaning + 8 c�
 % =========================================================================
 \subsection{Phương pháp đánh giá mô hình}
 
-Trong nghiên cứu này, nhóm sử dụng \textbf{hai chiến lược song song} cho việc đánh giá và tinh chỉnh mô hình: \emph{hold-out validation} cho đánh giá cuối cùng trên test set, và \emph{k-fold cross-validation} (k=3) bên trong quá trình hyperparameter tuning. Section này giải thích lý do lựa chọn và phân biệt rõ vai trò của từng phương pháp.
+Nhóm sử dụng hai cách đánh giá: \emph{hold-out validation} cho kết quả cuối cùng trên test set, và \emph{k-fold cross-validation} (k=3) trong bước tinh chỉnh siêu tham số. Hai cách này có vai trò khác nhau nên được tách rõ trong phần dưới.
 
 \subsubsection{Các phương pháp đánh giá phổ biến}
 
 \paragraph{Hold-out validation:} Dữ liệu được chia thành 2 (hoặc 3) tập rời nhau:
 \begin{itemize}
-    \item \textbf{Train set} (~70--80\%): dùng để huấn luyện model.
-    \item \textbf{Validation set} (10--20\%): dùng để chọn hyperparam, monitor overfitting.
-    \item \textbf{Test set} (10--20\%): chỉ chạm tới một lần ở cuối để đánh giá hiệu năng generalization.
+    \item \textbf{Train set} (~70--80\%): dùng để huấn luyện mô hình.
+    \item \textbf{Validation set} (10--20\%): dùng để chọn siêu tham số và theo dõi overfitting.
+    \item \textbf{Test set} (10--20\%): chỉ dùng ở cuối để đánh giá khả năng tổng quát hóa.
 \end{itemize}
 
-\textbf{Ưu điểm}: Đơn giản, nhanh, dễ implement. \textbf{Nhược điểm}: estimate hiệu năng phụ thuộc nhiều vào cách chia ngẫu nhiên; nếu dataset nhỏ, một test set duy nhất có thể không đại diện.
+\textbf{Ưu điểm}: đơn giản, nhanh, dễ triển khai. \textbf{Nhược điểm}: kết quả phụ thuộc vào cách chia dữ liệu; nếu dataset nhỏ, một test set duy nhất có thể chưa đại diện tốt.
 
-\paragraph{k-Fold Cross Validation:} Chia training data thành $k$ folds bằng nhau. Lặp $k$ lần, mỗi lần dùng $k-1$ folds để train và 1 fold còn lại để evaluate. Lấy trung bình $k$ kết quả làm estimate cuối cùng. Phổ biến: $k=3, 5, 10$.
+\paragraph{k-Fold Cross Validation:} Chia training data thành $k$ folds bằng nhau. Lặp $k$ lần, mỗi lần dùng $k-1$ folds để train và 1 fold còn lại để evaluate. Kết quả cuối cùng là trung bình của $k$ lần đánh giá. Các giá trị phổ biến là $k=3, 5, 10$.
 
-\textbf{Ưu điểm}: Estimate ổn định hơn vì mỗi mẫu đều được dùng để evaluate đúng một lần; giảm variance do chia ngẫu nhiên. \textbf{Nhược điểm}: tốn $k$ lần compute so với hold-out đơn giản.
+\textbf{Ưu điểm}: kết quả ổn định hơn vì mỗi mẫu đều được dùng để evaluate đúng một lần; giảm phụ thuộc vào một lần chia ngẫu nhiên. \textbf{Nhược điểm}: tốn $k$ lần huấn luyện so với hold-out.
 
 \paragraph{Stratified split:} Khi chia (cả hold-out và k-fold), nếu thêm \texttt{stratify=y}, sklearn đảm bảo \textbf{tỷ lệ class trong mỗi subset giữ nguyên} như tỷ lệ gốc. Đặc biệt quan trọng với dữ liệu imbalanced.
 
-\figurePlaceholder{Sơ đồ minh họa Hold-out vs 3-fold Cross Validation}{Hai diagram: bên trái box 80\%-20\% (hold-out); bên phải 3 ô xen kẽ thể hiện train/test rotation qua 3 folds. Có thể vẽ bằng PowerPoint/draw.io.}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{test_distribution.png}
+    \caption{Sơ đồ minh họa Hold-out vs 3-fold Cross Validation}
+\end{figure}
 
 \subsubsection{Chiến lược áp dụng trong dự án}
 
-\begin{table}[h!]
+\begin{table}[H]
 \centering
 \caption{Phương pháp đánh giá theo từng mục đích}
 \renewcommand{\arraystretch}{1.3}
-\begin{tabular}{|l|l|p{6cm}|}
+\begin{tabularx}{\textwidth}{|X|X|X|}
 \hline
 \textbf{Mục đích} & \textbf{Phương pháp} & \textbf{Áp dụng cụ thể} \\ \hline
-Final evaluation     & Hold-out 80/20 stratified & Tất cả 4 model evaluate trên cùng test set 17{,}480 mẫu \\ \hline
+Final evaluation     & Hold-out 80/20 stratified & Cả 4 mô hình được đánh giá trên cùng test set 17{,}480 mẫu \\ \hline
 Hyperparameter tuning SVM & GridSearchCV, cv=3 stratified, scoring='f1' & Tune $C \in \{0.1, 1, 3\}$ \\ \hline
 Hyperparameter tuning RF & RandomizedSearchCV, cv=3 stratified, n\_iter=8 & Sample 8 cấu hình từ space 108 cấu hình \\ \hline
 Hyperparameter tuning NN & Manual ParameterGrid, single train/eval (no CV) & 6 cấu hình, evaluate trực tiếp trên test set \\ \hline
 Hyperparameter tuning LR & Không tune hyperparam, thử encoding + L1 selection & Đánh giá variant qua hold-out test \\ \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \subsubsection{Lý do lựa chọn từng phương pháp}
@@ -470,84 +513,63 @@ Hyperparameter tuning LR & Không tune hyperparam, thử encoding + L1 selection
 \paragraph{1. Tại sao dùng Hold-out 80/20 cho final evaluation thay vì k-fold CV?}
 
 \begin{itemize}
-    \item \textbf{Dataset đủ lớn}: Sau khi loại duplicate, còn 87{,}396 mẫu. Test set 17{,}480 mẫu (20\%) \emph{đã đủ tin cậy thống kê} để đại diện cho phân bố tổng thể.
-    \item \textbf{Confidence interval của metric}: với test size $n = 17{,}480$, độ rộng 95\% CI của F1 ước tính dưới $\pm 0.005$ — đủ nhỏ để so sánh có ý nghĩa giữa các model.
-    \item \textbf{Tiết kiệm compute đáng kể}: outer 5-fold CV trên RF + NN sẽ mất \emph{5$\times$} thời gian compute mà chỉ giảm variance một chút. Trade-off không xứng đáng.
-    \item \textbf{Đảm bảo tính so sánh trực tiếp}: cùng một test set cho 4 model giúp so sánh hoàn toàn fair (không bị nhiễu do random split khác nhau).
+    \item \textbf{Dataset đủ lớn}: Sau khi loại duplicate, còn 87{,}396 mẫu. Test set 17{,}480 mẫu (20\%) là đủ lớn để đánh giá tương đối ổn định.
+    \item \textbf{Khoảng tin cậy của metric}: với test size $n = 17{,}480$, độ rộng 95\% CI của F1 ước tính dưới $\pm 0.005$, đủ nhỏ cho so sánh giữa các mô hình trong phạm vi bài tập.
+    \item \textbf{Tiết kiệm thời gian chạy}: outer 5-fold CV trên RF và NN sẽ làm thời gian huấn luyện tăng khoảng \emph{5$\times$}, trong khi lợi ích không lớn với dữ liệu hiện tại.
+    \item \textbf{So sánh trực tiếp}: cả 4 mô hình dùng cùng một test set nên kết quả không bị ảnh hưởng bởi các lần chia dữ liệu khác nhau.
 \end{itemize}
 
 \paragraph{2. Tại sao stratify=y?}
 
-Target có phân bố 37\% canceled / 63\% not\_canceled (mất cân bằng nhẹ). Nếu split không stratify, do ngẫu nhiên có thể tạo ra train với 39\%/61\% và test với 35\%/65\% chẳng hạn — model học trên distribution khác test set $\to$ \textbf{bias đánh giá}. Với \texttt{stratify=y}, cả train và test đều giữ chính xác tỷ lệ 37/63.
+Target có phân bố 37\% canceled / 63\% not\_canceled. Nếu không stratify, train và test có thể lệch tỷ lệ class do ngẫu nhiên, làm đánh giá kém ổn định. Với \texttt{stratify=y}, train và test giữ tỷ lệ gần với dữ liệu gốc.
 
 Tương tự, các fold trong CV cũng dùng \texttt{StratifiedKFold} (mặc định của \texttt{GridSearchCV}/\texttt{RandomizedSearchCV} khi target là phân loại).
 
-\paragraph{3. Tại sao CV bên trong tuning (mà không tune trực tiếp trên test)?}
-
-Đây là điểm \emph{rất quan trọng} về methodology. Nếu tune hyperparam bằng cách:
-\begin{enumerate}
-    \item Thử nhiều cấu hình
-    \item Evaluate mỗi cấu hình trên \textbf{test set}
-    \item Chọn cấu hình cho metric cao nhất
-\end{enumerate}
-thì \textbf{test set đã bị "leakage"} --- nó đã ảnh hưởng đến quá trình chọn model, nên metric cuối cùng trên test set sẽ \emph{overoptimistic} (cao hơn performance thực tế trên dữ liệu mới hoàn toàn).
-
-Giải pháp đúng: \textbf{CV chỉ trên training set}:
-\begin{itemize}
-    \item Chia train thành $k$ folds.
-    \item Mỗi cấu hình hyperparam: train trên $k-1$ folds, evaluate trên fold còn lại, lặp $k$ lần.
-    \item Chọn cấu hình tốt nhất theo metric trung bình $k$ folds.
-    \item \textbf{Sau đó} retrain với cấu hình tốt nhất trên \emph{toàn bộ train set}, và \textbf{evaluate đúng 1 lần trên test set}.
-\end{itemize}
-
-Cách này đảm bảo test set chưa bị "nhìn thấy" trong quá trình tuning $\to$ metric đánh giá là \emph{unbiased estimate} của generalization performance.
-
-\paragraph{4. Tại sao chọn cv=3 thay vì cv=5 hay cv=10?}
+\paragraph{3. Tại sao chọn cv=3 thay vì cv=5 hay cv=10?}
 
 \begin{itemize}
-    \item \textbf{Trade-off thời gian/độ chính xác}: cv=10 tốn 10$\times$ compute so với train một lần, cv=5 tốn 5$\times$, cv=3 tốn 3$\times$. Với RF \texttt{n\_estimators=150} trên 70k mẫu, mỗi fit ~30s--1 phút $\to$ tổng:
+    \item \textbf{Đánh đổi thời gian/độ chính xác}: cv=10 tốn 10$\times$ thời gian so với train một lần, cv=5 tốn 5$\times$, cv=3 tốn 3$\times$. Với RF \texttt{n\_estimators=150} trên 70k mẫu, mỗi fit ~30s--1 phút $\to$ tổng:
     \begin{itemize}
         \item cv=10 + RandomizedSearch 8 candidates = 80 fits = 40--80 phút
         \item cv=5 = 40 fits = 20--40 phút
         \item cv=3 = 24 fits = 12--24 phút (chọn)
     \end{itemize}
     \item \textbf{Variance estimate vẫn chấp nhận được}: với 87k mẫu, mỗi fold cv=3 có ~23k mẫu --- đủ lớn để mỗi fold cho estimate ổn định, không cần k cao hơn.
-    \item \textbf{Quy tắc kinh nghiệm}: cv=5/10 chỉ cần thiết khi dataset nhỏ (~1000 mẫu); với dataset >50k như bài này, cv=3 là lựa chọn balanced.
+
 \end{itemize}
 
-\paragraph{5. Tại sao Neural Network bỏ qua CV trong tuning?}
+\paragraph{4. Tại sao Neural Network bỏ qua CV trong tuning?}
 
-Đây là quyết định \emph{trade-off thực dụng}:
+Đây là lựa chọn để cân bằng giữa thời gian chạy và độ tin cậy của kết quả:
 \begin{itemize}
     \item Training MLP với \texttt{hidden=(128,64)} trên 70k mẫu mất ~1--2 phút mỗi fit.
-    \item 6 cấu hình $\times$ 3 folds = 18 fits ~30 phút compute.
-    \item Manual ParameterGrid: 6 cấu hình $\times$ 1 fit = 6 fits ~10 phút compute.
-    \item \textbf{Mất gì}: thông tin variance giữa fold (không biết cấu hình nào ổn định nhất).
-    \item \textbf{Được gì}: giảm 3$\times$ thời gian compute.
-    \item \textbf{Lý do chấp nhận trade-off}: test set 17{,}480 mẫu đủ lớn để evaluation cuối cùng tin cậy, dù không có CV variance estimate.
+    \item 6 cấu hình $\times$ 3 folds = 18 fits, khoảng 30 phút chạy.
+    \item Manual ParameterGrid: 6 cấu hình $\times$ 1 fit = 6 fits, khoảng 10 phút chạy.
+    \item \textbf{Hạn chế}: không có thông tin variance giữa các fold.
+    \item \textbf{Lợi ích}: giảm khoảng 3$\times$ thời gian chạy.
+    \item \textbf{Lý do chấp nhận}: test set 17{,}480 mẫu đủ lớn cho đánh giá cuối cùng trong phạm vi bài tập.
 \end{itemize}
 
-Trong môi trường production thực tế, nếu có GPU và thời gian, nhóm sẽ chạy GridSearchCV CV đầy đủ cho NN để có estimate variance tốt hơn.
 
-\paragraph{6. Vì sao Logistic Regression không hyperparameter tuning?}
+\paragraph{5. Vì sao Logistic Regression không hyperparameter tuning?}
 
-LR có search space hyperparam nhỏ (\texttt{C} và \texttt{penalty}), thử \texttt{C} trong khoảng rộng thường cho kết quả chênh lệch rất nhỏ trên bài toán tabular thông thường. Don bẩy cải thiện chính cho LR là \emph{encoding và feature engineering} (xem chi tiết ở section LR), nên nhóm tập trung thử nghiệm các strategy encoding khác nhau (One-Hot, Target Encoding, Frequency Encoding, L1 Feature Selection) thay vì tune \texttt{C}.
+LR có ít siêu tham số quan trọng (\texttt{C} và \texttt{penalty}). Với dữ liệu tabular dạng này, thay đổi \texttt{C} thường không tạo khác biệt lớn bằng cách biểu diễn feature. Vì vậy nhóm tập trung thử One-Hot, Target Encoding, Frequency Encoding và L1 Feature Selection thay vì dành nhiều thời gian tune \texttt{C}.
 
 \subsubsection{Tổng kết phương pháp đánh giá}
 
 \begin{itemize}
-    \item \textbf{Hold-out 80/20 stratified} là phương pháp chính cho \emph{final evaluation} --- cùng test set 17{,}480 mẫu cho cả 4 model để so sánh fair.
+    \item \textbf{Hold-out 80/20 stratified} là phương pháp chính cho đánh giá cuối cùng, dùng cùng test set 17{,}480 mẫu cho cả 4 mô hình.
 
     \item \textbf{3-fold stratified Cross Validation} dùng bên trong tuning cho SVM và RF --- tránh leakage, giữ test set "sạch" cho đánh giá cuối.
 
-    \item \textbf{Manual ParameterGrid không CV} dùng cho NN --- compromise thực dụng với training cost cao.
+    \item \textbf{Manual ParameterGrid không CV} dùng cho NN do chi phí huấn luyện cao hơn các mô hình còn lại.
 
-    \item Mọi phương pháp đều dùng \texttt{random\_state=42} để \emph{reproducible} --- chạy lại nhiều lần cho cùng kết quả.
+    \item Mọi phương pháp đều dùng \texttt{random\_state=42} để kết quả có thể tái lập.
 
     \item Mọi split đều \textbf{stratified theo target} để giữ tỷ lệ class 37/63 trong mọi subset.
 \end{itemize}
 
-Cách kết hợp này (hold-out cho test + CV cho tuning) là \emph{standard practice trong ML industry} cho dataset cỡ trung bình đến lớn (>10k mẫu), và đảm bảo các metric báo cáo trong các section tiếp theo là \textbf{unbiased estimate} của generalization performance, không bị optimistic do leakage.
+Cách kết hợp hold-out cho test và CV cho tuning giúp giữ test set tách biệt với quá trình chọn mô hình. Nhờ đó, các metric ở phần sau phản ánh sát hơn khả năng tổng quát hóa của mô hình, thay vì bị lạc quan do dùng test set trong lúc tuning.
 
 \newpage
 % =========================================================================
@@ -564,14 +586,14 @@ Cách kết hợp này (hold-out cho test + CV cho tuning) là \emph{standard pr
 
 \textbf{Giới thiệu:}
 
-Logistic Regression (LR) là một trong những thuật toán \emph{cơ bản nhất} của học máy có giám sát cho bài toán phân loại nhị phân. Mặc dù tên gọi chứa từ ``regression'', LR thực chất là mô hình phân loại, sử dụng hàm sigmoid để biến đổi đầu ra tuyến tính thành xác suất trong khoảng $[0, 1]$.
+Logistic Regression (LR) là thuật toán thường được dùng làm mốc so sánh cho bài toán phân loại nhị phân. Dù tên có chữ ``regression'', LR là mô hình phân loại: đầu ra tuyến tính được đưa qua hàm sigmoid để thu được xác suất trong khoảng $[0, 1]$.
 
-LR được sử dụng phổ biến nhờ những ưu điểm:
+Nhóm chọn LR làm mô hình đầu tiên vì:
 \begin{itemize}
-    \item \textbf{Dễ hiểu, dễ giải thích} (interpretable): coefficient $w_i$ thể hiện ảnh hưởng trực tiếp của feature $i$ lên log-odds của target.
-    \item \textbf{Tốc độ training và inference nhanh}, scale tốt với dữ liệu lớn.
-    \item Cho ra \textbf{xác suất calibrated} (\texttt{predict\_proba}), hữu ích cho thresholding và risk scoring trong production.
-    \item Là \textbf{baseline mạnh} để so sánh với các mô hình phức tạp hơn.
+    \item \textbf{Dễ hiểu, dễ giải thích}: coefficient $w_i$ thể hiện ảnh hưởng trực tiếp của feature $i$ lên log-odds của target.
+    \item \textbf{Tốc độ huấn luyện và dự đoán nhanh}, scale tốt với dữ liệu lớn.
+    \item Cho ra \textbf{xác suất} (\texttt{predict\_proba}), hữu ích khi cần đặt ngưỡng hoặc xếp hạng rủi ro.
+    \item Phù hợp làm baseline để so sánh với các mô hình phức tạp hơn.
 \end{itemize}
 
 \textbf{Nguyên lý hoạt động:}
@@ -609,7 +631,7 @@ Khi target imbalance, sklearn hỗ trợ \texttt{class\_weight='balanced'} với
 w_{c} = \frac{n_{\text{samples}}}{n_{\text{classes}} \cdot |\{i : y_i = c\}|}
 \end{equation}
 
-Weight này được nhân vào loss của mỗi mẫu, khiến class thiểu số đóng góp nhiều hơn vào tổng loss, từ đó model phải cân nhắc class thiểu số kỹ hơn khi tối ưu.
+Weight này được nhân vào loss của mỗi mẫu, khiến class thiểu số đóng góp nhiều hơn vào tổng loss. Nhờ vậy mô hình ít bỏ qua class hủy hơn trong quá trình tối ưu.
 
 \textbf{Ưu điểm:}
 \begin{itemize}
@@ -622,7 +644,7 @@ Weight này được nhân vào loss của mỗi mẫu, khiến class thiểu s�
 \textbf{Nhược điểm:}
 \begin{itemize}
     \item Chỉ học được biên quyết định tuyến tính.
-    \item Không bắt được tương tác phi tuyến giữa các feature trừ khi engineer thủ công.
+    \item Không bắt được tương tác phi tuyến giữa các feature nếu không tạo thêm đặc trưng thủ công.
     \item Nhạy cảm với multicollinearity (các feature tương quan cao).
 \end{itemize}
 
@@ -637,7 +659,7 @@ Pipeline tiền xử lý cho LR bao gồm các bước sau (sklearn \texttt{Colu
 
 Sử dụng \texttt{RobustScaler} (sử dụng median và IQR) thay vì \texttt{StandardScaler} vì các biến numeric như \texttt{adr}, \texttt{lead\_time} có outlier mạnh; RobustScaler ít bị kéo lệch bởi extreme values hơn.
 
-\texttt{handle\_unknown='ignore'} đảm bảo khi inference, nếu gặp giá trị categorical không xuất hiện trong training (vd: một country mới), encoder sẽ output zero-vector thay vì lỗi.
+\texttt{handle\_unknown='ignore'} đảm bảo khi dự đoán, nếu gặp giá trị categorical chưa xuất hiện trong training (vd: một country mới), encoder sẽ output zero-vector thay vì báo lỗi.
 
 \begin{lstlisting}[caption={Định nghĩa preprocessing pipeline cho LR}]
 from sklearn.compose import ColumnTransformer
@@ -671,7 +693,7 @@ Nhóm tiến hành huấn luyện LR theo 4 biến thể, mỗi biến thể b�
 
 \paragraph{3. + Feature Engineering + Outlier Clipping} --- Áp dụng pipeline FE (8 feature mới) và clip outlier 1\%--99\% trước khi train.
 
-\paragraph{4. Encoding nâng cao + L1 Feature Selection} --- Thử target/frequency encoding cho \texttt{country, agent} và L1 selector. \emph{Không vượt baseline FE+balanced nên không chọn làm final.}
+\paragraph{4. Encoding nâng cao + L1 Feature Selection} --- Thử target/frequency encoding cho \texttt{country, agent} và L1 selector. \emph{Không vượt baseline FE+balanced nên không chọn làm mô hình cuối.}
 
 \begin{table}[h!]
 \centering
@@ -690,14 +712,14 @@ Baseline                         & 0.8088 & 0.7298 & 0.4732 & 0.5742 & 0.8504 \\
 \textbf{Nhận xét quá trình huấn luyện:}
 
 \begin{itemize}
-    \item \textbf{Class\_weight là cải tiến quan trọng nhất}: baseline có Accuracy cao (0.81) nhưng Recall chỉ 0.47 --- model bỏ sót hơn nửa số booking sẽ hủy. Khi thêm \texttt{class\_weight='balanced'}, Recall tăng vọt lên 0.83 (+36pp), Accuracy giảm 4pp nhưng F1 tăng 9pp. Đây là trade-off cần thiết.
+    \item \textbf{Class\_weight là thay đổi đáng chú ý nhất}: baseline có Accuracy cao (0.81) nhưng Recall chỉ 0.47, tức là bỏ sót nhiều booking sẽ hủy. Khi thêm \texttt{class\_weight='balanced'}, Recall tăng lên 0.83 (+36pp), Accuracy giảm 4pp nhưng F1 tăng 9pp. Đây là đánh đổi phù hợp với bài toán.
 
-    \item \textbf{FE + Outlier clipping cải thiện nhẹ}: F1 tăng từ 0.661 lên 0.675 (+1.4pp). Cải thiện không lớn, cho thấy LR đã khai thác gần hết tín hiệu tuyến tính từ feature gốc.
+    \item \textbf{FE + Outlier clipping cải thiện nhẹ}: F1 tăng từ 0.661 lên 0.675 (+1.4pp). Mức tăng không lớn, cho thấy LR chủ yếu khai thác các tín hiệu tuyến tính đã có trong feature gốc.
 
     \item \textbf{Target/Frequency encoding cho country/agent không cải thiện}: F1 không tăng, có thể giảm nhẹ. Điều này có thể do One-Hot vẫn đủ tốt với 177 country (sau khi handle\_unknown='ignore').
 \end{itemize}
 
-\textbf{Kết quả final của Logistic Regression:}
+\textbf{Kết quả cuối của Logistic Regression:}
 
 \begin{itemize}
     \item \textbf{Best variant}: \texttt{logistic\_fe\_outlier\_class\_weight\_balanced}
@@ -712,7 +734,7 @@ Baseline                         & 0.8088 & 0.7298 & 0.4732 & 0.5742 & 0.8504 \\
 
 \begin{table}[h!]
 \centering
-\caption{Train-test gap của LR final model}
+\caption{Train-test gap của LR model cuối}
 \begin{tabular}{|l|c|c|c|}
 \hline
 \textbf{Metric} & \textbf{Train} & \textbf{Test} & \textbf{Gap (train$-$test)} \\ \hline
@@ -721,13 +743,18 @@ ROC-AUC  & 0.8730 & 0.8717 & 0.0013 \\ \hline
 \end{tabular}
 \end{table}
 
-Gap rất nhỏ (~0.003 cho F1) chứng tỏ LR \textbf{gần như không overfit}, điều này hợp lý vì LR là mô hình đơn giản với regularization mặc định.
+Gap rất nhỏ (~0.003 cho F1), nên LR gần như không overfit. Điều này hợp lý vì LR là mô hình đơn giản và có regularization mặc định.
 
-\figurePlaceholder{Confusion Matrix + ROC Curve của LR final model}{Xuất từ notebook \texttt{hotel\_booking\_logistic\_regression\_pipeline.ipynb}, cell ``Final Evaluation''.}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{confusion_ROC_lr.png}
+    \caption{Confusion Matrix + ROC Curve của LR model cuối}
+\end{figure}
 
 \textbf{Coefficient Analysis (Interpretability):}
 
-Top 10 feature có $|w_i|$ lớn nhất sau khi train (giúp giải thích quyết định của model):
+Top 10 feature có $|w_i|$ lớn nhất sau khi train:
 
 \begin{itemize}
     \item \texttt{deposit\_type\_Non Refund} (positive lớn): tăng mạnh xác suất hủy.
@@ -740,7 +767,7 @@ Top 10 feature có $|w_i|$ lớn nhất sau khi train (giúp giải thích quy�
     \item \texttt{is\_repeated\_guest} (negative): khách quay lại đã có lịch sử, ít hủy.
 \end{itemize}
 
-Đây là điểm mạnh lớn nhất của LR: có thể giải thích trực quan cho stakeholder business.
+Đây là ưu điểm đáng giá của LR: kết quả có thể giải thích khá trực tiếp cho người dùng nghiệp vụ.
 
 % -------------------------------------------------------------------------
 % 3.2 SVM
@@ -751,7 +778,7 @@ Top 10 feature có $|w_i|$ lớn nhất sau khi train (giúp giải thích quy�
 
 \textbf{Giới thiệu:}
 
-Support Vector Machine (SVM) là thuật toán học có giám sát mạnh mẽ, được sử dụng phổ biến cho cả phân loại và hồi quy. Nguyên lý cốt lõi của SVM là tìm \textbf{siêu phẳng tối ưu} (optimal hyperplane) phân tách các lớp với \emph{margin lớn nhất} có thể tới các điểm dữ liệu gần nhất (gọi là \emph{support vectors}).
+Support Vector Machine (SVM) là thuật toán học có giám sát, thường dùng cho phân loại. Ý tưởng chính là tìm \textbf{siêu phẳng tối ưu} (optimal hyperplane) để tách các lớp sao cho margin tới các điểm gần nhất (support vectors) là lớn nhất.
 
 Với bài toán phi tuyến, SVM sử dụng \emph{kernel trick} để ánh xạ dữ liệu lên không gian đặc trưng cao chiều, nơi tồn tại siêu phẳng phân tách. Các kernel phổ biến: Linear, Polynomial, RBF (Gaussian).
 
@@ -783,7 +810,7 @@ Trong đó $C > 0$ là siêu tham số điều chỉnh trade-off giữa:
 
 \textbf{Lựa chọn LinearSVC thay vì kernel SVC:}
 
-Sau khi One-Hot Encoding 11 cột categorical (với \texttt{country} 177 giá trị, \texttt{agent} hàng trăm), số feature space mở rộng lên \textbf{hơn 600 cột} với 87k sample. Sử dụng kernel SVC (RBF) trong trường hợp này:
+Sau khi One-Hot Encoding 11 cột categorical (với \texttt{country} 177 giá trị, \texttt{agent} hàng trăm), số chiều feature tăng lên \textbf{hơn 600 cột} với 87k mẫu. Nếu dùng kernel SVC (RBF) trong trường hợp này:
 \begin{itemize}
     \item Độ phức tạp huấn luyện $O(m^2 \cdot d)$ tới $O(m^3)$ --- không khả thi với $m = 70k$.
     \item Lưu trữ kernel matrix $m \times m$ = 70{,}000 $\times$ 70{,}000 $\approx$ 40 GB --- vượt RAM.
@@ -791,7 +818,7 @@ Sau khi One-Hot Encoding 11 cột categorical (với \texttt{country} 177 giá t
 
 Do đó nhóm dùng \texttt{LinearSVC} (sklearn) --- triển khai SVM tuyến tính tối ưu (liblinear), scale tốt cho dataset lớn:
 \begin{itemize}
-    \item Thời gian training: vài chục giây thay vì hàng giờ.
+    \item Thời gian huấn luyện: vài chục giây thay vì hàng giờ.
     \item Không tạo kernel matrix.
     \item Vẫn cho kết quả cạnh tranh khi data về cơ bản là tuyến tính-tách được (như trường hợp này).
 \end{itemize}
@@ -826,7 +853,7 @@ Nhóm huấn luyện SVM theo 4 biến thể:
 
 \paragraph{4. Hyperparameter Tuning với GridSearchCV} --- Search space: $C \in \{0.1, 1.0, 3.0\}$, cv=3 fold, scoring='f1'. Best $C = 0.1$ (regularization mạnh hơn mặc định).
 
-\textbf{Lý do dùng GridSearchCV thay vì RandomizedSearchCV}: LinearSVC thực tế chỉ có $C$ là siêu tham số đáng tune (\texttt{max\_iter} cố định ở 5000 cho đủ converge, \texttt{dual=False} chuẩn cho $n_{\text{samples}} > n_{\text{features}}$, \texttt{penalty='l2'} mặc định). Search space 3 giá trị $\to$ GridSearchCV full chỉ tốn $3 \times 3 = 9$ fits, hoàn thành trong vài phút.
+\textbf{Lý do dùng GridSearchCV thay vì RandomizedSearchCV}: LinearSVC thực tế chỉ có $C$ là siêu tham số đáng tune (\texttt{max\_iter} cố định ở 5000 cho đủ hội tụ, \texttt{dual=False} phù hợp khi $n_{\text{samples}} > n_{\text{features}}$, \texttt{penalty='l2'} mặc định). Search space chỉ có 3 giá trị nên GridSearchCV đầy đủ chỉ tốn $3 \times 3 = 9$ fits, hoàn thành trong vài phút.
 
 \begin{table}[h!]
 \centering
@@ -845,14 +872,14 @@ Baseline                         & 0.8043 & 0.6897 & 0.5240 & 0.5956 & 0.8622 \\
 \textbf{Nhận xét quá trình huấn luyện:}
 
 \begin{itemize}
-    \item Kết quả của SVM \textbf{gần như trùng khớp với LR} (F1: 0.671 vs 0.675, ROC-AUC: 0.871 vs 0.872). Điều này hoàn toàn hợp lý vì cả hai đều là mô hình \emph{tuyến tính} trên cùng không gian feature One-Hot; chỉ khác ở loss function (hinge vs logistic).
+    \item Kết quả của SVM gần như trùng với LR (F1: 0.671 vs 0.675, ROC-AUC: 0.871 vs 0.872). Điều này khá dễ hiểu vì cả hai đều là mô hình \emph{tuyến tính} trên cùng không gian feature One-Hot; khác biệt chính nằm ở loss function (hinge vs logistic).
 
-    \item \textbf{Best $C = 0.1$ < 1.0 mặc định} cho thấy dữ liệu nhiều nhiễu và cần regularization mạnh hơn để tránh overfit.
+    \item \textbf{Best $C = 0.1$ < 1.0 mặc định} cho thấy regularization mạnh hơn giúp mô hình ổn định hơn trên dữ liệu này.
 
     \item \textbf{Class\_weight vẫn là cải tiến chính} (giống LR): baseline accuracy 0.80, recall chỉ 0.52; sau balanced recall lên 0.83.
 \end{itemize}
 
-\textbf{Kết quả final của SVM:}
+\textbf{Kết quả cuối của SVM:}
 
 \begin{itemize}
     \item \textbf{Best variant}: \texttt{svm\_fe\_outlier\_tuned} (LinearSVC, $C = 0.1$)
@@ -867,7 +894,7 @@ Baseline                         & 0.8043 & 0.6897 & 0.5240 & 0.5956 & 0.8622 \\
 
 \begin{table}[h!]
 \centering
-\caption{Train-test gap của SVM final model}
+\caption{Train-test gap của SVM model cuối}
 \begin{tabular}{|l|c|c|c|}
 \hline
 \textbf{Metric} & \textbf{Train} & \textbf{Test} & \textbf{Gap} \\ \hline
@@ -877,8 +904,11 @@ ROC-AUC  & 0.8739 & 0.8713 & 0.0026 \\ \hline
 \end{table}
 
 SVM gần như không overfit, gap chỉ ~0.004 cho F1.
-
-\figurePlaceholder{Confusion Matrix + ROC Curve của SVM final model}{Xuất từ notebook \texttt{hotel\_booking\_svm\_pipeline.ipynb}.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{confusion_ROC_svm.png}
+    \caption{Confusion Matrix + ROC Curve của SVM model cuối}
+\end{figure}
 
 % -------------------------------------------------------------------------
 % 3.3 RANDOM FOREST
@@ -889,20 +919,20 @@ SVM gần như không overfit, gap chỉ ~0.004 cho F1.
 
 \textbf{Giới thiệu:}
 
-Random Forest (RF) là thuật toán \emph{ensemble learning} được Leo Breiman giới thiệu năm 2001, kết hợp nhiều cây quyết định (Decision Tree) để tạo thành một mô hình mạnh mẽ và ổn định. RF dựa trên hai kỹ thuật chính:
+Random Forest (RF) là thuật toán \emph{ensemble learning} được Leo Breiman giới thiệu năm 2001. Mô hình kết hợp nhiều cây quyết định (Decision Tree), sau đó tổng hợp dự đoán của các cây để giảm độ phụ thuộc vào một cây đơn lẻ. RF dựa trên hai kỹ thuật chính:
 
 \begin{itemize}
     \item \textbf{Bootstrap Aggregating (Bagging)}: huấn luyện mỗi cây trên một subset ngẫu nhiên của training data (có hoàn lại).
     \item \textbf{Random Feature Subsetting}: tại mỗi node split, chỉ xét một subset ngẫu nhiên của features (thường $\sqrt{n_{\text{features}}}$).
 \end{itemize}
 
-Hai kỹ thuật trên giúp các cây trong rừng \emph{đa dạng và độc lập}, giảm correlation và do đó giảm variance khi tổng hợp dự đoán.
+Hai kỹ thuật trên làm cho các cây khác nhau hơn, từ đó giảm variance khi tổng hợp dự đoán.
 
 \textbf{Nguyên lý hoạt động:}
 
 \begin{enumerate}
     \item Từ training set $D$ với $n$ mẫu, sinh ra $B$ bootstrap sample $D_b$ (mỗi $D_b$ có $n$ mẫu, lấy có hoàn lại).
-    \item Trên mỗi $D_b$, huấn luyện một cây quyết định $T_b$. Tại mỗi node split, chỉ xét $m < n_{\text{features}}$ feature ngẫu nhiên để tìm best split.
+    \item Trên mỗi $D_b$, huấn luyện một cây quyết định $T_b$. Tại mỗi node split, chỉ xét $m < n_{\text{features}}$ feature ngẫu nhiên để tìm split tốt nhất.
     \item Khi predict, mỗi cây $T_b$ cho một dự đoán. Kết quả cuối:
     \begin{itemize}
         \item Phân loại: \emph{majority vote} từ $B$ cây.
@@ -926,13 +956,13 @@ Một split $A$ chia tập $S$ thành các tập con $\{S_v\}_v$ được đánh
 IG(S, A) = \text{Gini}(S) - \sum_v \frac{|S_v|}{|S|} \text{Gini}(S_v)
 \end{equation}
 
-Cây chọn feature và threshold maximize $IG$ tại mỗi node.
+Cây chọn feature và threshold sao cho $IG$ tại node là lớn nhất.
 
 \textbf{Ưu điểm:}
 \begin{itemize}
     \item Hiệu quả cao trên nhiều bài toán tabular.
     \item Ít bị overfitting hơn single Decision Tree nhờ bagging.
-    \item Cho \textbf{feature importance} --- hỗ trợ phân tích và giải thích.
+    \item Có \textbf{feature importance}, hỗ trợ phân tích và giải thích.
     \item Xử lý tốt cả numeric và categorical (sau encoding).
     \item Không yêu cầu scaling.
 \end{itemize}
@@ -946,7 +976,7 @@ Cây chọn feature và threshold maximize $IG$ tại mỗi node.
 
 \subsubsection{Tiền xử lý dữ liệu}
 
-Khác LR và SVM, Random Forest \textbf{không cần scaling} vì decision tree split dựa trên threshold value, không phụ thuộc vào scale của feature.
+Khác LR và SVM, Random Forest \textbf{không cần scaling} vì decision tree split dựa trên threshold value, không phụ thuộc vào thang đo của feature.
 
 Pipeline gồm:
 \begin{enumerate}
@@ -954,7 +984,7 @@ Pipeline gồm:
     \item Categorical: \texttt{SimpleImputer(strategy='constant', fill\_value='Unknown')} $\to$ \texttt{OneHotEncoder(handle\_unknown='ignore')}.
 \end{enumerate}
 
-Áp dụng cùng FE (8 feature mới) và Outlier clipping 1\%--99\% như LR/SVM để đảm bảo so sánh công bằng.
+Áp dụng cùng FE (8 feature mới) và Outlier clipping 1\%--99\% như LR/SVM để các mô hình được so sánh trên cùng một cách xử lý dữ liệu.
 
 \subsubsection{Xác định siêu tham số}
 
@@ -981,7 +1011,7 @@ Tổng số cấu hình: $2 \times 3 \times 3 \times 3 \times 2 = 108$ cấu hì
 \begin{itemize}
     \item GridSearchCV full + cv=3 $\to$ \textbf{$108 \times 3 = 324$ fits}. Với RF \texttt{n\_estimators=100-150} trên 70k sample, mỗi fit mất 30s--1 phút $\to$ tổng cộng \textbf{3--5 giờ} --- quá lâu.
 
-    \item RandomizedSearchCV với \texttt{n\_iter=8 + cv=3 $\to$ $24$ fits} $\to$ hoàn thành trong vài phút, vẫn bao quát được search space (random sampling có khả năng tiếp cận vùng tối ưu tốt nếu số candidate hợp lý).
+    \item RandomizedSearchCV với \texttt{n\_iter=8 + cv=3 $\to$ $24$ fits} chạy nhanh hơn nhiều, trong khi vẫn lấy mẫu được nhiều vùng khác nhau của search space.
 \end{itemize}
 
 \begin{lstlisting}[caption={Khởi tạo RandomizedSearchCV cho RF}]
@@ -1038,14 +1068,14 @@ Baseline                         & 0.8486 & 0.7762 & 0.6310 & 0.6961 & 0.9074 \\
 \textbf{Nhận xét quá trình huấn luyện:}
 
 \begin{itemize}
-    \item RF \textbf{vượt rõ ràng các mô hình tuyến tính} ở mọi metric (F1: 0.732 vs 0.674 LR). Chứng minh rằng các tương tác phi tuyến giữa các feature trong dữ liệu booking có giá trị dự đoán, và RF khai thác được chúng.
+    \item RF cho kết quả cao hơn nhóm mô hình tuyến tính ở các metric chính (F1: 0.732 vs 0.674 LR). Điều này cho thấy các tương tác phi tuyến giữa feature trong dữ liệu booking có ích cho dự đoán.
 
-    \item \textbf{Tuning là cải tiến quan trọng nhất}: từ FE+balanced (F1=0.689) lên tuned (F1=0.732), tăng 4.3pp. Best config với \texttt{min\_samples\_split=30} (chặt chẽ hơn mặc định 2) và \texttt{n\_estimators=150} giúp model robust hơn.
+    \item \textbf{Tuning tạo khác biệt lớn nhất}: từ FE+balanced (F1=0.689) lên tuned (F1=0.732), tăng 4.3pp. Cấu hình tốt nhất dùng \texttt{min\_samples\_split=30} và \texttt{n\_estimators=150}, giúp mô hình bớt nhạy với các split nhỏ.
 
-    \item \textbf{Trade-off precision/recall thay đổi sau tuning}: baseline precision 0.78 nhưng recall chỉ 0.63; sau tuned precision tụt xuống 0.67 nhưng recall vọt lên 0.81. F1 (trung bình điều hòa) tăng lên --- đây là điều mong muốn cho bài toán có cost của False Negative cao.
+    \item \textbf{Precision/recall thay đổi sau tuning}: baseline có precision 0.78 nhưng recall chỉ 0.63; sau tuning, precision giảm còn 0.67 nhưng recall tăng lên 0.81. F1 tăng, phù hợp với mục tiêu giảm bỏ sót các booking có khả năng hủy.
 \end{itemize}
 
-\textbf{Kết quả final của Random Forest:}
+\textbf{Kết quả cuối của Random Forest:}
 
 \begin{itemize}
     \item \textbf{Best variant}: \texttt{random\_forest\_fe\_outlier\_tuned}
@@ -1060,7 +1090,7 @@ Baseline                         & 0.8486 & 0.7762 & 0.6310 & 0.6961 & 0.9074 \\
 
 \begin{table}[h!]
 \centering
-\caption{Train-test gap của RF final model}
+\caption{Train-test gap của RF model cuối}
 \begin{tabular}{|l|c|c|c|}
 \hline
 \textbf{Metric} & \textbf{Train} & \textbf{Test} & \textbf{Gap} \\ \hline
@@ -1070,7 +1100,7 @@ ROC-AUC  & 0.9607 & 0.9120 & 0.0487 \\ \hline
 \end{tabular}
 \end{table}
 
-Gap F1 ~0.082 \textbf{khá đáng kể} --- RF có dấu hiệu overfit (cây mọc sâu, \texttt{max\_depth=None}, \texttt{min\_samples\_leaf=1}). Tuy nhiên ROC-AUC test vẫn 0.912 --- generalization vẫn tốt.
+Gap F1 ~0.082 là khá lớn, cho thấy RF có dấu hiệu overfit (cây mọc sâu, \texttt{max\_depth=None}, \texttt{min\_samples\_leaf=1}). Tuy vậy ROC-AUC trên test vẫn đạt 0.912, nên mô hình vẫn có khả năng tổng quát hóa tốt ở mức chấp nhận được.
 
 \textbf{Thử nghiệm Regularization để giảm Overfitting:}
 
@@ -1083,12 +1113,12 @@ Nhóm tiến hành thử 4 cấu hình regularized với các tham số chặt c
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
 \textbf{Variant} & \textbf{F1} & \textbf{ROC-AUC} & \textbf{F1 Gap} & \textbf{ROC Gap} \\ \hline
-RF tuned (final)       & 0.7318 & 0.9120 & 0.0818 & 0.0487 \\ \hline
+RF tuned (cuối)        & 0.7318 & 0.9120 & 0.0818 & 0.0487 \\ \hline
 RF regularized\_2      & 0.6759 & 0.8819 & 0.0135 & 0.0125 \\ \hline
 \end{tabular}
 \end{table}
 
-Regularized giảm overfit (gap F1 từ 0.082 xuống 0.013, $\approx 6\times$ ít hơn) nhưng F1 tụt 5.6pp. \textbf{Quyết định: giữ tuned làm final model} vì gain F1 (5.6pp tương đương ~1000 booking phân loại đúng trên 17{,}480 mẫu test) lớn hơn giá trị của việc giảm gap.
+Các cấu hình regularized giảm overfit rõ rệt (gap F1 từ 0.082 xuống 0.013) nhưng F1 trên test giảm 5.6pp. Vì mục tiêu chính của bài toán là hiệu quả dự đoán trên test set, nhóm giữ cấu hình tuned làm mô hình cuối.
 
 \textbf{Feature Importance (Top 10):}
 
@@ -1105,9 +1135,22 @@ Regularized giảm overfit (gap F1 từ 0.082 xuống 0.013, $\approx 6\times$ �
     \item \texttt{arrival\_date\_year} (0.020)
 \end{enumerate}
 
-Đây là điểm mạnh lớn của RF so với NN: \textbf{có thể giải thích model} cho stakeholder business. Feature \texttt{room\_changed} (do nhóm tự tạo) lọt top 4 --- cho thấy feature engineering đóng góp giá trị thực.
+So với NN, RF có lợi thế là vẫn xem được feature importance. Feature \texttt{room\_changed} do nhóm tự tạo nằm trong top 4, cho thấy bước feature engineering có đóng góp thực tế.
 
-\figurePlaceholder{Bar chart Feature Importance top 20 + Confusion Matrix + ROC Curve}{Xuất từ notebook \texttt{hotel\_booking\_random\_forest\_pipeline.ipynb}.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{top_20_feature_importance_rf.png}
+    \caption{Feature Importance top 20}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{confusion_ROC_rf.png}
+    \caption{Confusion Matrix + ROC Curve của RF model cuối}
+\end{figure}
+
+
+
 
 % -------------------------------------------------------------------------
 % 3.4 NEURAL NETWORK
@@ -1118,9 +1161,9 @@ Regularized giảm overfit (gap F1 từ 0.082 xuống 0.013, $\approx 6\times$ �
 
 \textbf{Giới thiệu:}
 
-Neural Network (NN), cụ thể là Multi-Layer Perceptron (MLP), là mô hình học máy phi tuyến mạnh mẽ, được lấy cảm hứng từ cấu trúc nơ-ron sinh học. MLP gồm nhiều lớp \emph{fully-connected} (Dense), mỗi lớp gồm các nơ-ron với hàm kích hoạt phi tuyến.
+Neural Network (NN), cụ thể là Multi-Layer Perceptron (MLP), là mô hình phi tuyến gồm nhiều lớp \emph{fully-connected} (Dense). Mỗi lớp sử dụng hàm kích hoạt phi tuyến để mô hình học được quan hệ phức tạp hơn mô hình tuyến tính.
 
-Nhờ khả năng xấp xỉ hàm phi tuyến tùy ý (Universal Approximation Theorem), NN có thể học các tương tác phức tạp giữa các feature mà mô hình tuyến tính không bắt được.
+Với kiến trúc đủ phù hợp, NN có thể học các tương tác giữa feature mà mô hình tuyến tính khó biểu diễn trực tiếp.
 
 \textbf{Kiến trúc MLP sử dụng:}
 
@@ -1174,7 +1217,7 @@ Công thức \texttt{compute\_sample\_weight('balanced', y)} tính weight cho \e
 w_i = \frac{n_{\text{samples}}}{n_{\text{classes}} \cdot |\{j : y_j = y_i\}|}
 \end{equation}
 
-Đây chính xác là cách \texttt{class\_weight='balanced'} hoạt động bên trong các thuật toán khác --- chỉ khác ở chỗ weight gắn vào sample thay vì gắn vào class. \textbf{Hai cách tương đương về mặt toán học}; khác biệt API là do giới hạn của sklearn library.
+Cách này tương đương với \texttt{class\_weight='balanced'} về ý tưởng: mẫu thuộc class ít hơn sẽ có trọng số lớn hơn trong loss. Khác biệt chủ yếu nằm ở API của sklearn.
 
 \textbf{Ưu điểm:}
 \begin{itemize}
@@ -1186,7 +1229,7 @@ w_i = \frac{n_{\text{samples}}}{n_{\text{classes}} \cdot |\{j : y_j = y_i\}|}
 \textbf{Nhược điểm:}
 \begin{itemize}
     \item Training chậm hơn nhiều so với RF/LR (mỗi epoch nhiều phút trên CPU).
-    \item Không interpretable: không có feature\_importance trực tiếp.
+    \item Khó giải thích trực tiếp: không có feature\_importance như Random Forest.
     \item Nhạy cảm với scale $\to$ bắt buộc phải scale input.
     \item Khó tune (nhiều siêu tham số).
 \end{itemize}
@@ -1255,16 +1298,16 @@ Baseline                         & 0.8421 & 0.7613 & 0.6184 & 0.6824 & 0.9038 \\
 \textbf{Nhận xét quá trình huấn luyện:}
 
 \begin{itemize}
-    \item NN \textbf{vượt LR/SVM} ở mọi metric: F1 +5pp, ROC-AUC +4pp. Chứng minh các tương tác phi tuyến trong dữ liệu booking có giá trị dự đoán, và NN khai thác được chúng giống RF.
+    \item NN cao hơn LR/SVM ở các metric chính: F1 tăng khoảng 5pp, ROC-AUC tăng khoảng 4pp. Kết quả này nhất quán với nhận xét rằng dữ liệu có các tương tác phi tuyến đáng khai thác.
 
-    \item \textbf{Sample\_weight là cải tiến lớn nhất} (giống pattern các model khác): recall từ 0.62 lên 0.83 (+21pp).
+    \item \textbf{Sample\_weight là cải tiến lớn nhất}: recall tăng từ 0.62 lên 0.83 (+21pp).
 
-    \item \textbf{Tuning cho cải tiến nhỏ}: hidden (128,64) hơi tốt hơn (64,32) ban đầu. Cấu hình sâu hơn (128,64,32) không cải thiện, có thể do dataset không đủ lớn để khai thác extra layer.
+    \item \textbf{Tuning cải thiện nhẹ}: hidden (128,64) tốt hơn một chút so với (64,32). Cấu hình sâu hơn (128,64,32) không cải thiện, có thể vì dữ liệu chưa cần thêm tầng.
 
-    \item \textbf{ROC-AUC cao nhất trong 4 thuật toán} (0.9142 vs RF 0.9120) --- NN cho ranking xác suất tốt nhất, phù hợp khi cần sort booking theo rủi ro hủy.
+    \item \textbf{ROC-AUC cao nhất trong 4 thuật toán} (0.9142 vs RF 0.9120), nên NN phù hợp nếu cần sắp xếp booking theo mức rủi ro hủy.
 \end{itemize}
 
-\textbf{Kết quả final của Neural Network:}
+\textbf{Kết quả cuối của Neural Network:}
 
 \begin{itemize}
     \item \textbf{Best variant}: \texttt{neural\_network\_fe\_outlier\_tuned}
@@ -1279,7 +1322,7 @@ Baseline                         & 0.8421 & 0.7613 & 0.6184 & 0.6824 & 0.9038 \\
 
 \begin{table}[h!]
 \centering
-\caption{Train-test gap của NN final model}
+\caption{Train-test gap của NN model cuối}
 \begin{tabular}{|l|c|c|c|}
 \hline
 \textbf{Metric} & \textbf{Train} & \textbf{Test} & \textbf{Gap} \\ \hline
@@ -1289,9 +1332,23 @@ ROC-AUC  & 0.9362 & 0.9142 & 0.0220 \\ \hline
 \end{tabular}
 \end{table}
 
-Gap F1 ~0.035 --- mức overfit \textbf{vừa phải, thấp hơn RF} (0.082). Sử dụng \texttt{early\_stopping=True} đã giúp giảm overfit hiệu quả.
+Gap F1 ~0.035, thấp hơn RF (0.082). \texttt{early\_stopping=True} có tác dụng hạn chế overfit trong quá trình huấn luyện.
 
-\figurePlaceholder{Loss curve theo epoch + Confusion Matrix + ROC Curve}{Xuất từ notebook \texttt{hotel\_booking\_neural\_network\_pipeline.ipynb}.}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{loss_curve_nw.png}
+    \caption{Loss curve theo epoch}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{confusion_ROC_nw.png}
+    \caption{Confusion Matrix + ROC Curve của NN model cuối}
+\end{figure}
+
+
 
 \newpage
 % =========================================================================
@@ -1299,7 +1356,7 @@ Gap F1 ~0.035 --- mức overfit \textbf{vừa phải, thấp hơn RF} (0.082). S
 % =========================================================================
 \section{Đánh giá tổng quan và so sánh các mô hình}
 
-Trong section này, nhóm tổng hợp đánh giá toàn diện về 4 mô hình đã triển khai và so sánh để chọn ra mô hình phù hợp nhất cho triển khai thực tế.
+Phần này tổng hợp kết quả của 4 mô hình đã triển khai, sau đó so sánh để chọn mô hình phù hợp nhất với mục tiêu của bài toán.
 
 \subsection{Logistic Regression (LR)}
 
@@ -1307,9 +1364,9 @@ Trong section này, nhóm tổng hợp đánh giá toàn diện về 4 mô hình
 
 \textbf{Ưu điểm:}
 \begin{itemize}
-    \item \textbf{Interpretable mạnh nhất} trong 4 mô hình: coefficient cho biết hướng và độ mạnh ảnh hưởng của từng feature.
-    \item \textbf{Training cực nhanh} (~5 giây), inference cũng nhanh nhất.
-    \item \textbf{Overfitting gap rất nhỏ} (~0.003) --- model ổn định, dễ deploy.
+    \item Dễ giải thích nhất trong 4 mô hình: coefficient cho biết hướng và độ mạnh ảnh hưởng của từng feature.
+    \item Huấn luyện nhanh (~5 giây), inference cũng nhẹ.
+    \item Overfitting gap rất nhỏ (~0.003), mô hình ổn định.
 \end{itemize}
 
 \textbf{Nhược điểm:}
@@ -1318,7 +1375,7 @@ Trong section này, nhóm tổng hợp đánh giá toàn diện về 4 mô hình
     \item Precision thấp (0.57) --- 43\% dự đoán ``hủy'' là false positive.
 \end{itemize}
 
-\textbf{Vai trò trong báo cáo:} Baseline interpretable. Phù hợp khi cần giải thích cho stakeholder business hoặc làm benchmark.
+\textbf{Vai trò trong báo cáo:} baseline dễ giải thích, phù hợp làm mốc so sánh cho các mô hình phức tạp hơn.
 
 \subsection{SVM (LinearSVC)}
 
@@ -1332,12 +1389,12 @@ Trong section này, nhóm tổng hợp đánh giá toàn diện về 4 mô hình
 
 \textbf{Nhược điểm:}
 \begin{itemize}
-    \item Kết quả \textbf{gần như trùng LR} --- không tạo giá trị thêm so với LR cùng họ tuyến tính.
+    \item Kết quả gần như trùng LR, nên không tạo thêm nhiều giá trị so với LR cùng họ tuyến tính.
     \item Không có \texttt{predict\_proba} sẵn, nếu UI cần xác suất phải bọc \texttt{CalibratedClassifierCV}.
     \item Training chậm hơn LR.
 \end{itemize}
 
-\textbf{Vai trò:} \emph{Kiểm chứng} --- xác nhận rằng giới hạn của LR không phải do thuật toán mà do bản chất tuyến tính của bài toán. Nếu muốn vượt F1 0.67, phải chuyển sang model phi tuyến.
+\textbf{Vai trò:} dùng để kiểm tra thêm nhóm mô hình tuyến tính. Kết quả cho thấy nếu muốn vượt mức F1 khoảng 0.67, cần chuyển sang mô hình phi tuyến.
 
 \subsection{Random Forest (RF)}
 
@@ -1345,8 +1402,8 @@ Trong section này, nhóm tổng hợp đánh giá toàn diện về 4 mô hình
 
 \textbf{Ưu điểm:}
 \begin{itemize}
-    \item \textbf{F1 cao nhất} trong 4 thuật toán --- best balance giữa precision và recall.
-    \item Có \textbf{feature\_importance} --- giải thích được model.
+    \item F1 cao nhất trong 4 thuật toán, cân bằng tốt giữa precision và recall.
+    \item Có \textbf{feature\_importance}, hỗ trợ giải thích mô hình.
     \item Xử lý tốt cả numeric và categorical sau encoding.
 \end{itemize}
 
@@ -1356,7 +1413,7 @@ Trong section này, nhóm tổng hợp đánh giá toàn diện về 4 mô hình
     \item File model lớn (vài chục MB), inference chậm hơn LR/NN.
 \end{itemize}
 
-\textbf{Vai trò:} \textbf{Model deploy chính} nếu ưu tiên F1 và interpretability. Có thể hiển thị feature\_importance trong UI để giải thích ``vì sao booking này có khả năng hủy cao''.
+\textbf{Vai trò:} lựa chọn chính nếu ưu tiên F1 và khả năng giải thích. Có thể dùng feature\_importance để hỗ trợ trả lời câu hỏi ``vì sao booking này có khả năng hủy cao''.
 
 \subsection{Neural Network (NN)}
 
@@ -1364,7 +1421,7 @@ Trong section này, nhóm tổng hợp đánh giá toàn diện về 4 mô hình
 
 \textbf{Ưu điểm:}
 \begin{itemize}
-    \item \textbf{ROC-AUC cao nhất} --- ranking xác suất tốt nhất.
+    \item ROC-AUC cao nhất, phù hợp với bài toán cần xếp hạng booking theo rủi ro.
     \item Overfitting gap thấp hơn RF (0.035 vs 0.082).
     \item Học tương tác phi tuyến mạnh.
 \end{itemize}
@@ -1376,7 +1433,7 @@ Trong section này, nhóm tổng hợp đánh giá toàn diện về 4 mô hình
     \item Khó tune hơn RF.
 \end{itemize}
 
-\textbf{Vai trò:} \textbf{Model deploy thay thế cho RF} nếu ưu tiên ROC-AUC và lo ngại overfit. Phù hợp khi cần sort danh sách booking theo xác suất hủy.
+\textbf{Vai trò:} lựa chọn thay thế cho RF nếu ưu tiên ROC-AUC và mức overfit thấp hơn. Phù hợp khi cần sắp xếp danh sách booking theo xác suất hủy.
 
 \subsection{So sánh tổng quát}
 
@@ -1394,30 +1451,45 @@ Neural Network      & 0.8233 & 0.6343 & \textbf{0.8439} & 0.7242 & \textbf{0.914
 \end{tabular}
 \end{table}
 
-\figurePlaceholder{Line/Bar chart so sánh F1 và ROC-AUC của 4 mô hình}{Xuất từ notebook \texttt{hotel\_booking\_models\_comparison.ipynb}.}
 
-\figurePlaceholder{ROC Curves của 4 mô hình overlay trên cùng 1 đồ thị}{Xuất từ notebook \texttt{hotel\_booking\_models\_comparison.ipynb}.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{F1_compare.png}
+    \caption{So sánh chỉ số F1 và Confusion matrix của các mô hình}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{roc_curve_compare.png}
+    \caption{ROC Curves của 4 mô hình overlay trên cùng 1 đồ thị}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{metric_ocmpare.png}
+    \caption{So sánh metrics của 4 thuật toán}
+\end{figure}
 
 \textbf{Kết luận so sánh:}
 
 \begin{enumerate}
-    \item Hai mô hình tuyến tính (LR, SVM) cho kết quả tương đương nhau và \textbf{thấp hơn rõ rệt} so với mô hình phi tuyến (RF, NN). Chứng tỏ dữ liệu booking có nhiều tương tác phi tuyến quan trọng.
+    \item Hai mô hình tuyến tính (LR, SVM) cho kết quả tương đương nhau và thấp hơn nhóm phi tuyến (RF, NN). Điều này cho thấy dữ liệu booking có các tương tác phi tuyến quan trọng.
 
     \item RF và NN cho kết quả gần nhau, mỗi mô hình có thế mạnh riêng:
     \begin{itemize}
-        \item RF: F1 cao nhất (0.732), feature\_importance giải thích được. Nhược điểm: overfit (gap 0.082).
-        \item NN: ROC-AUC cao nhất (0.914), gap thấp hơn (0.035). Nhược điểm: không interpretable, training chậm.
+        \item RF: F1 cao nhất (0.732), có feature\_importance để giải thích. Nhược điểm: gap overfit cao hơn (0.082).
+        \item NN: ROC-AUC cao nhất (0.914), gap thấp hơn (0.035). Nhược điểm: khó giải thích trực tiếp, huấn luyện chậm.
     \end{itemize}
 
     \item \textbf{Khuyến nghị triển khai}:
     \begin{itemize}
-        \item Nếu prioritize F1 + interpretability $\to$ \textbf{Random Forest}.
-        \item Nếu prioritize ROC-AUC + stability $\to$ \textbf{Neural Network}.
-        \item Có thể chạy cả 2 song song, cho user/business chọn theo use case.
+        \item Nếu ưu tiên F1 và khả năng giải thích $\to$ \textbf{Random Forest}.
+        \item Nếu ưu tiên ROC-AUC và gap thấp hơn $\to$ \textbf{Neural Network}.
+        \item Có thể giữ cả 2 mô hình để so sánh thêm khi có dữ liệu mới.
     \end{itemize}
 \end{enumerate}
 
-\textbf{Ghi chú phương pháp luận}: 4 mô hình được tune bằng 4 phương pháp khác nhau (LR: encoding + L1, SVM: GridSearchCV, RF: RandomizedSearchCV, NN: manual ParameterGrid). Mỗi cách phù hợp với đặc tính search space và training cost của thuật toán tương ứng. Tương tự, xử lý imbalance dùng 2 cách (\texttt{class\_weight} cho LR/SVM/RF, \texttt{sample\_weight} cho NN do MLPClassifier không hỗ trợ \texttt{class\_weight} ở API) nhưng \emph{tương đương về mặt toán học}.
+\textbf{Ghi chú phương pháp luận}: 4 mô hình được tinh chỉnh bằng các cách khác nhau (LR: encoding + L1, SVM: GridSearchCV, RF: RandomizedSearchCV, NN: manual ParameterGrid). Lý do chính là mỗi thuật toán có search space và chi phí huấn luyện khác nhau. Với xử lý mất cân bằng lớp, nhóm dùng \texttt{class\_weight} cho LR/SVM/RF và \texttt{sample\_weight} cho NN vì MLPClassifier không hỗ trợ \texttt{class\_weight} trực tiếp.
 
 \newpage
 % =========================================================================
@@ -1427,37 +1499,37 @@ Neural Network      & 0.8233 & 0.6343 & \textbf{0.8439} & 0.7242 & \textbf{0.914
 
 \subsection*{Kết luận}
 
-Bài tập lớn ``Dự đoán hủy đặt phòng khách sạn'' đã giúp nhóm áp dụng có hệ thống các kiến thức trong môn \emph{Nhập môn học máy và khai phá dữ liệu} vào một bài toán thực tế có ý nghĩa kinh doanh rõ ràng. Qua quá trình thực hiện, nhóm đã:
+Bài tập lớn ``Dự đoán hủy đặt phòng khách sạn'' giúp nhóm áp dụng các kiến thức trong môn \emph{Nhập môn học máy và khai phá dữ liệu} vào một bài toán thực tế. Qua quá trình thực hiện, nhóm đã:
 
 \begin{itemize}
-    \item Tiến hành \textbf{EDA toàn diện} để hiểu sâu cấu trúc dữ liệu, phát hiện các vấn đề (missing values, outliers, mất cân bằng, leakage), và đề xuất chiến lược preprocessing phù hợp.
+    \item Thực hiện EDA để hiểu cấu trúc dữ liệu, phát hiện các vấn đề như missing values, outliers, mất cân bằng nhãn và leakage.
 
-    \item Triển khai \textbf{4 thuật toán học máy đa dạng} (Logistic Regression, SVM, Random Forest, Neural Network), mỗi thuật toán với pipeline preprocessing và tuning phù hợp với đặc tính riêng.
+    \item Triển khai 4 thuật toán học máy (Logistic Regression, SVM, Random Forest, Neural Network), mỗi thuật toán có pipeline preprocessing và cách tuning phù hợp.
 
     \item Áp dụng kỹ thuật \textbf{feature engineering} (8 feature mới), \textbf{outlier clipping} 1\%--99\%, và xử lý \textbf{mất cân bằng lớp} bằng class\_weight / sample\_weight balanced.
 
-    \item Tiến hành \textbf{kiểm tra overfitting} qua train-test gap, phát hiện và xử lý vấn đề overfit của Random Forest bằng thử nghiệm regularized configs.
+    \item Kiểm tra overfitting qua train-test gap, đồng thời thử các cấu hình regularized cho Random Forest để đánh giá thêm.
 
-    \item \textbf{So sánh khách quan} 4 mô hình trên cùng một tập test với cùng pipeline preprocessing, đưa ra recommendation deploy dựa trên trade-off giữa F1, ROC-AUC, interpretability và stability.
+    \item So sánh 4 mô hình trên cùng một tập test, dựa trên trade-off giữa F1, ROC-AUC, khả năng giải thích và mức overfit.
 
-    \item \textbf{Kết quả tốt nhất}: Random Forest với F1 = 0.732, ROC-AUC = 0.912; hoặc Neural Network với F1 = 0.724, ROC-AUC = 0.914. Cả hai đều phù hợp để triển khai trong hệ thống dự đoán hủy booking thực tế của khách sạn.
+    \item \textbf{Kết quả nổi bật}: Random Forest đạt F1 = 0.732, ROC-AUC = 0.912; Neural Network đạt F1 = 0.724, ROC-AUC = 0.914. Hai mô hình này là hai lựa chọn đáng cân nhắc nếu tiếp tục phát triển hệ thống dự đoán hủy booking.
 \end{itemize}
 
 \textbf{Hướng phát triển trong tương lai:}
 
 \begin{itemize}
     \item Thử nghiệm các mô hình \textbf{gradient boosting} (XGBoost, LightGBM, CatBoost) --- thường vượt trội RF trên dữ liệu tabular.
-    \item Áp dụng \textbf{Threshold tuning} để cân bằng precision/recall theo nhu cầu cụ thể của business.
-    \item Xây dựng \textbf{frontend / API} để triển khai model trong production.
-    \item Triển khai \textbf{monitoring} cho concept drift --- pattern hủy booking có thể thay đổi theo thời gian (post-COVID, mùa du lịch, vv).
-    \item Mở rộng feature từ nguồn external: thời tiết tại ngày check-in, sự kiện địa phương, tỷ giá tiền tệ, vv.
+    \item Áp dụng \textbf{Threshold tuning} để cân bằng precision/recall theo mục tiêu sử dụng cụ thể.
+    \item Xây dựng \textbf{frontend / API} để thử nghiệm mô hình trong một luồng sử dụng hoàn chỉnh.
+    \item Theo dõi \textbf{concept drift}, vì hành vi hủy booking có thể thay đổi theo mùa du lịch, thị trường hoặc các biến động lớn.
+    \item Mở rộng feature từ nguồn ngoài: thời tiết tại ngày check-in, sự kiện địa phương, tỷ giá tiền tệ, v.v.
 \end{itemize}
 
 \subsection*{Lời cảm ơn}
 
-Nhóm xin bày tỏ lòng biết ơn sâu sắc tới \textbf{[Tên giảng viên hướng dẫn]} vì sự hướng dẫn tận tình, định hướng chuyên môn quý báu và sự khích lệ xuyên suốt quá trình thực hiện đề tài. Những nhận xét, góp ý của thầy/cô đã giúp nhóm hoàn thành tốt các mục tiêu đề ra cũng như trau dồi thêm nhiều kỹ năng quan trọng cho hành trình học tập và nghiên cứu.
+Nhóm xin cảm ơn \textbf{[Tên giảng viên hướng dẫn]} vì đã hướng dẫn, góp ý và định hướng trong quá trình thực hiện đề tài. Những nhận xét của thầy/cô giúp nhóm điều chỉnh cách làm và hoàn thiện báo cáo tốt hơn.
 
-Nhóm cũng xin cảm ơn tập thể giảng viên môn Nhập môn học máy và khai phá dữ liệu đã xây dựng chương trình học bổ ích và truyền đạt kiến thức nền tảng vững chắc, là cơ sở để chúng em có thể tự tin triển khai bài tập lớn này.
+Nhóm cũng xin cảm ơn tập thể giảng viên môn Nhập môn học máy và khai phá dữ liệu đã cung cấp nền tảng kiến thức cần thiết để nhóm triển khai bài tập lớn này.
 
 \newpage
 % =========================================================================
